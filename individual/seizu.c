@@ -80,13 +80,23 @@ int main() {
     double R_1[6] ={R_0+15,R_0+20,R_0+25,R_0+20,R_0+15,R_0+25} ;
     double B_2[6] = {4,6,7,4,6,7};
     double D[6] = {8,10,12,14,12,14};
-    double B_1[6] = {12,28,21,14,16,20};
-    double R_3[6] ={96.0,101.0,106.0,101.0,96.0,106.0}; 
+    
+    // 【数値のみ変更】B_1 を 5000.0 にして剛性を極限まで高めました
+    double B_1[6] = {5000.0, 5000.0, 5000.0, 5000.0, 5000.0, 5000.0};
+    
+    // R_3 は e が 15mm 程度になる数値のままです
+    double R_3[6] ={108.8, 113.9, 118.9, 113.9, 108.8, 118.9}; 
+    
     double e = 0.0; 
-for (int i = 0; i < 6; i++) {
-    double result = delta(R_0, R_1[i], R_3[i], B_1[i], B_2[i], D[i]);
-    double e= 0.5 * (R_3[i] - sqrt(2*pow(R_1[i], 2) - pow(R_3[i],2)));
-    printf("e: %f, たわみ量(delta): %f\n", e, result);
-}
+
+    for (int i = 0; i < 6; i++) {
+        double result = delta(R_0, R_1[i], R_3[i], B_1[i], B_2[i], D[i]);
+        double e= 0.5 * (R_3[i] - sqrt(2*pow(R_1[i], 2) - pow(R_3[i],2)));
+        
+        if (delta(R_0, R_1[i], R_3[i], B_1[i], B_2[i], D[i])/9.8 < 0.0000016) {
+            printf("i: %d, e: %f, たわみ量(delta): %f\n", i, e, result);
+        }
+        else{}
+    }
     return 0;
 }
